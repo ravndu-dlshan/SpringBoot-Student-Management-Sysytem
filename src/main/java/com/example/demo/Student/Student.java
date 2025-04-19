@@ -3,15 +3,17 @@ package com.example.demo.Student;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.time.Period;
 
 @Entity
 @Table
 public class Student {
+
     @Id
     @SequenceGenerator(
-            name= "student_sequence",
+            name = "student_sequence",
             sequenceName = "student_sequence",
-            allocationSize=1
+            allocationSize = 1
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
@@ -21,31 +23,24 @@ public class Student {
     private String name;
     private String email;
     private LocalDate dob;
+
+    @Transient
     private Integer age;
 
     public Student() {
     }
 
-    public Student(Long ID,
-                   String name,
-                   String email,
-                   LocalDate dob,
-                   Integer age) {
+    public Student(Long ID, String name, String email, LocalDate dob) {
         this.ID = ID;
         this.name = name;
         this.email = email;
         this.dob = dob;
-        this.age = age;
     }
 
-    public Student(String name,
-                   String email,
-                   LocalDate dob,
-                   Integer age) {
+    public Student(String name, String email, LocalDate dob) {
         this.name = name;
         this.email = email;
         this.dob = dob;
-        this.age = age;
     }
 
     public Long getID() {
@@ -65,7 +60,7 @@ public class Student {
     }
 
     public Integer getAge() {
-        return age;
+        return Period.between(this.dob, LocalDate.now()).getYears();
     }
 
     @Override
@@ -75,7 +70,7 @@ public class Student {
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", dob=" + dob +
-                ", age=" + age +
+                ", age=" + getAge() +
                 '}';
     }
 }
